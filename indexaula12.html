@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+// exercicio request
+
+async function animeYear(year) {
+    const promise = new Promise((resolve, reject) => {
+        const xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("GET", "https://api.jikan.moe/v4/top/anime");
+
+        xmlhttp.onload = () => {
+            if (xmlhttp.status === 200) {
+                const jsonResponse = xmlhttp.response;
+                resolve(jsonResponse);
+            } else {
+                reject(xmlhttp.status);
+            }
+        }
+
+        xmlhttp.onerror = () => {
+            reject("Error!");
+        };
+
+        xmlhttp.responseType = "json";
+        xmlhttp.send();
+    });
+
+    try {
+        const resultYear = await promise;
+        console.log(resultYear);
+    } catch (error) {
+        console.error("O ano não tem conteúdos.");
+    }
+}
+
+
+    console.log(animeYear(2000));
+    
+    
+// com fetch:
+
+
+fetch("https://api.jikan.moe/v4/top/anime")
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error(`Erro! ${error.message}`));
+
+
+
+    </script>
+</body>
+</html>
